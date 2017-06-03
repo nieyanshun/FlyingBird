@@ -5,28 +5,28 @@ import org.flying.bird.protocol.Message;
 
 public class BirdMessage implements Message {
 
-	private Header header;
+    private Header header;
 
-	private Object body;
+    private Object body;
 
-	public BirdMessage(Header header, Object body) {
-		this.header = header;
-		this.body = body;
-	}
+    public BirdMessage(Header header, Object body) {
+        this.header = header;
+        this.body = body;
+    }
 
-	@Override
-	public Header getHeader() {
-		return header;
-	}
+    @Override
+    public Header getHeader() {
+        return header;
+    }
 
-	@Override
-	public Object body() {
-		return body;
-	}
+    @Override
+    public Object body() {
+        return body;
+    }
 
-	@Override
-	public String toString() {
-		return "BirdMessage [header=" + header + ", body=" + body + "]";
-	}
+    @Override
+    public String toString() {
+        return "BirdMessage [header=" + header + ", body=" + body + "]";
+    }
 
 }

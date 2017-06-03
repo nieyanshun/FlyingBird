@@ -16,36 +16,36 @@ package org.flying.bird.protocol;
  *
  */
 public interface Header {
-	
-	final static short MAGIC = 0x0666;
 
-	final static short RET_MASK = 0x0FF2;
+    final static short MAGIC = 0x0666;
 
-	final static short RET_CODE = 0x0662;
-	
-	final static short REQ_MASK = 0x0FF4;
+    final static short RET_MASK = 0x0FF2;
 
-	final static short REQ_CODE = 0x0664;
+    final static short RET_CODE = 0x0662;
 
-	static byte VERSION = 0x01;
+    final static short REQ_MASK = 0x0FF4;
 
-	final static byte EXT = 0x00;
-	
-	final static int HEADER_LENGTH = 16;
-	
-	 int serialId();
-	 
-	 int bodyLength();
+    final static short REQ_CODE = 0x0664;
 
-	 int timeStamp();
-	 
-	 byte version();
-	 
-	 byte ext();
-	 
-	 boolean isReq();
-	 
-	 boolean isRet();
-	 
+    static byte VERSION = 0x01;
+
+    final static byte EXT = 0x00;
+
+    final static int HEADER_LENGTH = 16;
+
+    int serialId();
+
+    int bodyLength();
+
+    int timeStamp();
+
+    byte version();
+
+    byte ext();
+
+    boolean isReq();
+
+    boolean isRet();
+
 }
 

@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public interface Message extends Serializable {
 
-	Header getHeader();
+    Header getHeader();
 
-	Object body();
+    Object body();
 }

@@ -5,18 +5,19 @@ import org.flying.bird.protocol.codec.HessianCodec;
 
 public class HessianCodecTest {
 
-	void testCodeC() {
-		Student s = new Student();
-		s.setUname("学生A");
-		s.setAge(18);
+    void testCodeC() {
+        Student s = new Student();
+        s.setUname("学生A");
+        s.setAge(18);
 
-		HessianCodec codec = new HessianCodec();
-		byte[] b = codec.encode(s, CodecType.REQUEST);
-		
-		System.out.println(codec.decode(b));
+        HessianCodec codec = new HessianCodec();
+        byte[] b = codec.encode(s, CodecType.REQUEST);
 
-	}
-	public static void main(String[] args){
-		new HessianCodecTest().testCodeC();
-	}
+        System.out.println(codec.decode(b));
+
+    }
+
+    public static void main(String[] args) {
+        new HessianCodecTest().testCodeC();
+    }
 }
