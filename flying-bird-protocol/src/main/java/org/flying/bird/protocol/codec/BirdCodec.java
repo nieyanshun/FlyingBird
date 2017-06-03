@@ -8,20 +8,36 @@ import org.apache.log4j.Logger;
 import org.flying.bird.protocol.Codec;
 import org.flying.bird.protocol.Header;
 import org.flying.bird.protocol.Message;
+import org.flying.bird.protocol.SerialPool;
 import org.flying.bird.protocol.exception.BirdDecodingException;
-import org.flying.bird.protocol.exception.BirdEncodingException;
 import org.flying.bird.protocol.exception.UnkonwnMagicCodeException;
 import org.flying.bird.protocol.packet.BirdMessage;
 import org.flying.bird.protocol.packet.MessageHeader;
+import org.flying.bird.protocol.serialization.HessianSerialization;
+import org.flying.bird.protocol.serialization.Serialization;
 
 /**
  *
  * @author nieyanshun
  *
  */
-public abstract class BirdCodec implements Codec {
+public class BirdCodec implements Codec {
 
     private static final Logger LOG = Logger.getLogger(BirdCodec.class);
+
+    Serialization serialization;
+
+    byte id;
+
+    public BirdCodec() {
+        serialization = new HessianSerialization();
+    }
+
+    public BirdCodec(byte id) {
+        super();
+        this.id = (byte) (id & SerialPool.MASK);
+        serialization = SerialPool.getSerialization(getId());
+    }
 
     /**
      * getAndIncrement()增长到MAX_VALUE时，再增长会变为MIN_VALUE，负数也可以做为ID
@@ -119,12 +135,8 @@ public abstract class BirdCodec implements Codec {
         byte[] body = new byte[header.bodyLength()];
         System.arraycopy(data, Header.HEADER_LENGTH, body, 0, header.bodyLength());
 
-        try {
-            return new BirdMessage(header, decodeBody(body));
+        return new BirdMessage(header, decodeBody(body));
 
-        } catch (IOException e) {
-            throw new BirdDecodingException(e.getMessage());
-        }
 
     }
 
@@ -135,18 +147,13 @@ public abstract class BirdCodec implements Codec {
      * @return
      * @throws IOException
      */
-    public abstract Object decodeBody(byte[] data) throws IOException;
-
-    abstract byte[] doEncode(Object msg) throws IOException;
+    public Object decodeBody(byte[] data) {
+        return serialization.deserialize(data);
+    }
 
     @Override
     public byte[] encode(Object msg, CodecType type) {
-        byte[] body;
-        try {
-            body = doEncode(msg);
-        } catch (IOException e) {
-            throw new BirdEncodingException();
-        }
+        byte[] body = serialization.serialize(msg);
 
         byte[] header = encodeHeader(createHeader(type, body.length));
         byte[] binaryMsg = new byte[Header.HEADER_LENGTH + body.length];
@@ -158,10 +165,14 @@ public abstract class BirdCodec implements Codec {
 
     private Header createHeader(CodecType type, int bodyLength) {
 
-        MessageHeader.Builder builder = new MessageHeader.Builder()
+        MessageHeader.Builder builder = new MessageHeader.Builder().ext(getId())
                 .serialId(serialCounter.getAndIncrement())
                 .timeStamp((int) (System.currentTimeMillis() / 1000)).bodyLength(bodyLength);
         return (CodecType.REQUEST == type) ? builder.buildReq() : builder.buildRet();
+    }
+
+    byte getId() {
+        return (this.id);
     }
 
 }

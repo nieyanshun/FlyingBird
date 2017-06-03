@@ -1,7 +1,7 @@
 package org.flying.bird.protocol;
 
 import org.flying.bird.protocol.Codec.CodecType;
-import org.flying.bird.protocol.codec.HessianCodec;
+import org.flying.bird.protocol.codec.BirdCodec;
 
 public class HessianCodecTest {
 
@@ -10,7 +10,7 @@ public class HessianCodecTest {
         s.setUname("学生A");
         s.setAge(18);
 
-        HessianCodec codec = new HessianCodec();
+        BirdCodec codec = new BirdCodec(SerialPool.HESSIAN);
         byte[] b = codec.encode(s, CodecType.REQUEST);
 
         System.out.println(codec.decode(b));

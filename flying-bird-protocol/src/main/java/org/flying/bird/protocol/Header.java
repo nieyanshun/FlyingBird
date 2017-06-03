@@ -15,6 +15,10 @@ package org.flying.bird.protocol;
  * @author nieyanshun
  *
  */
+/**
+ * @author nieyanshun
+ *
+ */
 public interface Header {
 
     final static short MAGIC = 0x0666;
@@ -41,6 +45,11 @@ public interface Header {
 
     byte version();
 
+    /**
+     * ext 低4位用作序列化协议
+     * 
+     * @return
+     */
     byte ext();
 
     boolean isReq();
