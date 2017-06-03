@@ -4,8 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.log4j.Logger;
 import org.flying.bird.protocol.Codec;
 import org.flying.bird.protocol.Header;
@@ -15,7 +13,6 @@ import org.flying.bird.protocol.exception.BirdEncodingException;
 import org.flying.bird.protocol.exception.UnkonwnMagicCodeException;
 import org.flying.bird.protocol.packet.BirdMessage;
 import org.flying.bird.protocol.packet.MessageHeader;
-import org.flying.bird.protocol.packet.MessageHeader.Builder;
 
 /**
  *
@@ -71,7 +68,7 @@ public abstract class BirdCodec implements Codec {
 		return headerPacket;
 	}
 
-	Header decodeHeader(byte[] data) throws IOException {
+	public Header decodeHeader(byte[] data) throws IOException {
 		if (null == data || data.length < Header.HEADER_LENGTH)
 			throw new BirdDecodingException();
 
@@ -114,17 +111,16 @@ public abstract class BirdCodec implements Codec {
 		} catch (IOException e) {
 			LOG.error(e);
 		}
-		System.out.println(header);
 
 		int length = Header.HEADER_LENGTH + header.bodyLength();
 		if (data.length != length) {
 			throw new BirdDecodingException("Binary data broken.");
 		}
 		byte[] body = new byte[header.bodyLength()];
-		System.arraycopy(data, Header.HEADER_LENGTH , body, 0, header.bodyLength());
+		System.arraycopy(data, Header.HEADER_LENGTH, body, 0, header.bodyLength());
 
 		try {
-			return new BirdMessage(header, doDecode(body));
+			return new BirdMessage(header, decodeBody(body));
 
 		} catch (IOException e) {
 			throw new BirdDecodingException(e.getMessage());
@@ -132,7 +128,14 @@ public abstract class BirdCodec implements Codec {
 
 	}
 
-	abstract Object doDecode(byte[] data) throws IOException;
+	/**
+	 * 对body报文进行解码
+	 * 
+	 * @param data
+	 * @return
+	 * @throws IOException
+	 */
+	public abstract Object decodeBody(byte[] data) throws IOException;
 
 	abstract byte[] doEncode(Object msg) throws IOException;
 
@@ -148,7 +151,7 @@ public abstract class BirdCodec implements Codec {
 		byte[] header = encodeHeader(createHeader(type, body.length));
 		byte[] binaryMsg = new byte[Header.HEADER_LENGTH + body.length];
 		System.arraycopy(header, 0, binaryMsg, 0, header.length);
-		System.arraycopy(body, 0, binaryMsg, Header.HEADER_LENGTH , body.length);
+		System.arraycopy(body, 0, binaryMsg, Header.HEADER_LENGTH, body.length);
 
 		return binaryMsg;
 	}

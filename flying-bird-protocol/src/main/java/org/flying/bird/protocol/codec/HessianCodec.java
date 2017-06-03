@@ -12,7 +12,10 @@ public class HessianCodec extends BirdCodec {
 	private static final Logger LOG = Logger.getLogger(HessianCodec.class);
 
 	@Override
-	Object doDecode(byte[] data) {
+	public Object decodeBody(byte[] data) {
+		if (null == data) {
+			return null;
+		}
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		HessianInput hessianIn = new HessianInput(in);
 		Object body = null;
@@ -32,7 +35,9 @@ public class HessianCodec extends BirdCodec {
 
 	@Override
 	byte[] doEncode(Object body) throws IOException {
-
+		if (null == body) {
+			return null;
+		}
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		HessianOutput hessianOut = new HessianOutput(os);
 		try {
