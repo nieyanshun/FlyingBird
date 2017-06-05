@@ -4,7 +4,7 @@ public interface Codec {
 
     Object decode(byte[] data);
 
-    byte[] encode(Object obj, CodecType type);
+    byte[] encode(Object obj, int requestId, boolean isReq);
 
     public static enum CodecType {
         REQUEST, RESPONSE

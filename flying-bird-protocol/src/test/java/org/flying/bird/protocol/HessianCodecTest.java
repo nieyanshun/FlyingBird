@@ -11,9 +11,9 @@ public class HessianCodecTest {
         s.setAge(18);
 
         BirdCodec codec = new BirdCodec(SerialPool.HESSIAN);
-        byte[] b = codec.encode(s, CodecType.REQUEST);
+//        byte[] b = codec.encode(s, CodecType.REQUEST);
 
-        System.out.println(codec.decode(b));
+//        System.out.println(codec.decode(b));
 
     }
 

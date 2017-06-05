@@ -27,7 +27,7 @@ public class BirdCodec implements Codec {
 
     Serialization serialization;
 
-    byte id;
+    byte serializstionToolId;
 
     public BirdCodec() {
         serialization = new HessianSerialization();
@@ -35,7 +35,7 @@ public class BirdCodec implements Codec {
 
     public BirdCodec(byte id) {
         super();
-        this.id = (byte) (id & SerialPool.MASK);
+        this.serializstionToolId = (byte) (serializstionToolId & SerialPool.MASK);
         serialization = SerialPool.getSerialization(getId());
     }
 
@@ -152,27 +152,27 @@ public class BirdCodec implements Codec {
     }
 
     @Override
-    public byte[] encode(Object msg, CodecType type) {
+    public byte[] encode(Object msg, int requestId, boolean isReq) {
         byte[] body = serialization.serialize(msg);
 
-        byte[] header = encodeHeader(createHeader(type, body.length));
+        byte[] headerArr = encodeHeader(createHeader(isReq, body.length, requestId));
         byte[] binaryMsg = new byte[Header.HEADER_LENGTH + body.length];
-        System.arraycopy(header, 0, binaryMsg, 0, header.length);
+        System.arraycopy(headerArr, 0, binaryMsg, 0, headerArr.length);
         System.arraycopy(body, 0, binaryMsg, Header.HEADER_LENGTH, body.length);
 
         return binaryMsg;
     }
 
-    private Header createHeader(CodecType type, int bodyLength) {
+    private Header createHeader(boolean isReq, int bodyLength, int requestId) {
 
         MessageHeader.Builder builder = new MessageHeader.Builder().ext(getId())
                 .serialId(serialCounter.getAndIncrement())
                 .timeStamp((int) (System.currentTimeMillis() / 1000)).bodyLength(bodyLength);
-        return (CodecType.REQUEST == type) ? builder.buildReq() : builder.buildRet();
+        return (isReq) ? builder.buildReq() : builder.buildRet();
     }
 
     byte getId() {
-        return (this.id);
+        return (this.serializstionToolId);
     }
 
 }
