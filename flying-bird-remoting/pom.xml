@@ -11,24 +11,19 @@
     <artifactId>flying-bird-remoting</artifactId>
     <name>flying-bird-remoting</name>
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netty.version>5.0.0.Alpha1</netty.version>
+        <bird.protocol.version>0.0.1-SNAPSHOT</bird.protocol.version>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>3.8.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>5.0.0.Alpha1</version>
+            <version>${netty.version}</version>
         </dependency>
         <dependency>
             <groupId>flying-bird</groupId>
             <artifactId>flying-bird-protocol</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${bird.protocol.version}</version>
         </dependency>
     </dependencies>
 </project>
