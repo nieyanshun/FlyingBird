@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
  * @author nieyanshun
  *
  */
-final class SpringContext extends Context {
+final public class SpringContext extends Context {
 
     private static Map<String, Object> OBJS = new ConcurrentHashMap<>();
 
@@ -26,6 +26,7 @@ final class SpringContext extends Context {
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         applicationContext = context;
+        ContextFactory.regiest(this);
     }
 
     @Override
