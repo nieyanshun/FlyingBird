@@ -1,0 +1,3 @@
+http\://www.letv.com/schema/flying-bird/reference=org.flying.bird.spring.reference.handler.ReferenceNamespaceHandler  
+http\://www.letv.com/schema/flying-bird/service=org.flying.bird.spring.service.handler.ServiceNamespaceHandler
+http\://www.letv.com/schema/flying-bird/reg=org.flying.bird.spring.reg.handler.RegNamespaceHandler
