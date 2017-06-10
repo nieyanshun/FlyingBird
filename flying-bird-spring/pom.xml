@@ -40,5 +40,10 @@
             <artifactId>spring-aop</artifactId>
             <version>${springframework.version}</version>
         </dependency>
+        <dependency>
+            <groupId>flying-bird</groupId>
+            <artifactId>flying-bird-rpc</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

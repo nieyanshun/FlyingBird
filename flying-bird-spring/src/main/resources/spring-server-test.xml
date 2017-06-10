@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:reg="http://www.letv.com/schema/flying-bird/reg"
+    xmlns:reference="http://www.letv.com/schema/flying-bird/reference"
+    xmlns:service="http://www.letv.com/schema/flying-bird/service"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.letv.com/schema/flying-bird/reg
+                        http://www.letv.com/schema/flying-bird/reg/reg.xsd
+                        http://www.letv.com/schema/flying-bird/reference
+                        http://www.letv.com/schema/flying-bird/reference/reference.xsd
+                        http://www.letv.com/schema/flying-bird/service
+                        http://www.letv.com/schema/flying-bird/service/service.xsd
+                        ">
+
+    <service:service id="birdService"
+        interface="test.org.flying.bird.spring.Service" service-ref="serviceImpl"
+        registry="regCenter" />
+
+</beans>
