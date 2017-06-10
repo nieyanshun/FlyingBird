@@ -14,7 +14,6 @@
                         ">
     <reg:reg id="regCenter" url="127.0.0.1:2181" />
 
-    <bean id="serviceImpl" class="test.org.flying.bird.spring.ServiceImpl"></bean>
 
     <service:service id="birdService"
         interface="test.org.flying.bird.spring.Service" service-ref="serviceImpl"

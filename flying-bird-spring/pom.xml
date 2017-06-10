@@ -45,5 +45,10 @@
             <artifactId>flying-bird-rpc</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>flying-bird</groupId>
+            <artifactId>flying-bird-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

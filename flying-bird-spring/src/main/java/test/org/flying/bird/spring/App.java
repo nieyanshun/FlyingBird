@@ -11,6 +11,7 @@ public class App {
 
         context.start();
         try {
+            Object byType = context.getBean(org.flying.bird.spring.SpringContext.class);
             org.flying.bird.spring.api.Service serviceBeanHolder =
                     (org.flying.bird.spring.api.Service) context.getBean("birdService");
             System.out.println(serviceBeanHolder);

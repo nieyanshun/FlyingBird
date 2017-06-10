@@ -13,6 +13,7 @@
     <properties>
         <netty.version>5.0.0.Alpha1</netty.version>
         <bird.protocol.version>0.0.1-SNAPSHOT</bird.protocol.version>
+        <bird.common.version>0.0.1-SNAPSHOT</bird.common.version>
     </properties>
     <dependencies>
         <dependency>
@@ -24,6 +25,11 @@
             <groupId>flying-bird</groupId>
             <artifactId>flying-bird-protocol</artifactId>
             <version>${bird.protocol.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>flying-bird</groupId>
+            <artifactId>flying-bird-common</artifactId>
+            <version>${bird.common.version}</version>
         </dependency>
     </dependencies>
 </project>

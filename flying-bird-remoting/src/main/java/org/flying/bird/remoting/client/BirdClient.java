@@ -8,6 +8,10 @@ import org.flying.bird.remoting.codec.BinaryMessageDecoder;
 import org.flying.bird.remoting.codec.BinaryMessageEncoder;
 import org.flying.bird.remoting.exception.RemotingException;
 import org.flying.bird.remoting.future.ResponseFuture;
+import org.flying.bird.remoting.handler.InboundExceptionHandler;
+import org.flying.bird.remoting.handler.OutboundExceptionHandler;
+import org.flying.bird.remoting.handler.ResponseProcessorHandler;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -66,7 +70,10 @@ public class BirdClient implements Client {
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeLine = ch.pipeline();
                             pipeLine.addLast(new BinaryMessageDecoder())
-                                    .addLast(new BinaryMessageEncoder());
+                                    .addLast(new BinaryMessageEncoder())
+                                    .addLast(new ResponseProcessorHandler())
+                                    .addLast(new OutboundExceptionHandler())
+                                    .addLast(new InboundExceptionHandler());
                         }
                     });
             ChannelFuture f = bootStrap.connect(getHost(), getPort()).sync();

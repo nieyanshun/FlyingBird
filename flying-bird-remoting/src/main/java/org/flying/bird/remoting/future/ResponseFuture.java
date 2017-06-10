@@ -16,15 +16,15 @@ public class ResponseFuture implements Future {
 
     private Object lock = new Object();
 
-    private static long TIME_OUT = 1000L;
+    private static long TIME_OUT = 10000L;
 
     @Override
-    public Object get() throws InterruptedException {
+    public Response get() throws InterruptedException {
         return get(TIME_OUT, TimeUnit.MILLISECONDS);
     }
 
     @Override
-    public Object get(long timeOut, TimeUnit unit) throws InterruptedException {
+    public Response get(long timeOut, TimeUnit unit) throws InterruptedException {
         if ((unit != TimeUnit.SECONDS) && (unit != TimeUnit.MILLISECONDS))
             throw new RuntimeException("Only TimeUnit.SECONDS or TimeUnit.MILLISECONDS allowed.");
         if (timeOut < 0)
@@ -35,7 +35,7 @@ public class ResponseFuture implements Future {
         if (!isDone()) {
             synchronized (lock) {
                 if (!isDone()) {
-                    wait(timeOut);
+                    lock.wait(timeOut);
 
                     long end = System.currentTimeMillis();
 
@@ -81,7 +81,10 @@ public class ResponseFuture implements Future {
     }
 
     void doRecived(Response response) {
-        this.response = response;
-        this.lock.notifyAll();
+        synchronized (lock) {
+            System.out.println("Notify all");
+            this.response = response;
+            lock.notifyAll();
+        }
     }
 }

@@ -8,7 +8,7 @@ public class TestClient {
         BirdClient client = new BirdClient();
         try {
             client.connect();
-            client.send(new Request().setMsg("hello!"));
+            client.request(new Request().setMsg("hello!"));
         } catch (Exception e) {
             e.printStackTrace();
         }

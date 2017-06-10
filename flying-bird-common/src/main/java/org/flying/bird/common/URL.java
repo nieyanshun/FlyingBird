@@ -1,8 +1,9 @@
 package org.flying.bird.common;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class URL {
+public class URL implements Serializable{
 
     private String host;
 
@@ -12,7 +13,7 @@ public class URL {
 
     private String method;
 
-    private Map<String, Object> param;
+    private Map<String, MethodArg> param;
 
     public static class Builder {
 
@@ -24,7 +25,7 @@ public class URL {
 
         private String method;
 
-        private Map<String, Object> param;
+        private Map<String, MethodArg> param;
 
         public Builder host(String host) {
             this.host = host;
@@ -46,7 +47,7 @@ public class URL {
             return this;
         }
 
-        public Builder param(Map<String, Object> param) {
+        public Builder param(Map<String, MethodArg> param) {
             this.param = param;
             return this;
         }
@@ -80,7 +81,7 @@ public class URL {
         return method;
     }
 
-    public Map<String, Object> getParam() {
+    public Map<String, MethodArg> getParam() {
         return param;
     }
 

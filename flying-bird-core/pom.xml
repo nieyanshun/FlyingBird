@@ -10,4 +10,20 @@
     </parent>
     <artifactId>flying-bird-core</artifactId>
     <name>flying-bird-core</name>
+    <properties>
+        <bird.common.version>0.0.1-SNAPSHOT</bird.common.version>
+        <bird.common.spring>0.0.1-SNAPSHOT</bird.common.spring>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>flying-bird</groupId>
+            <artifactId>flying-bird-common</artifactId>
+            <version>${bird.common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>flying-bird</groupId>
+            <artifactId>flying-bird-spring</artifactId>
+            <version>${bird.common.spring}</version>
+        </dependency>
+    </dependencies>
 </project>

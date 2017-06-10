@@ -21,14 +21,19 @@ public class BinaryMessageEncoder extends MessageToByteEncoder<Encodealbe> {
     @Override
     protected void encode(ChannelHandlerContext ctx, Encodealbe msg, ByteBuf out) throws Exception {
         byte[] data = null;
-        if (msg instanceof Request) {
-            int requestId = ((Request) msg).getRequestId();
-            data = codec.encode(((Request) msg).getMsg(), requestId, true);
-        } else if (msg instanceof Response) {
-            int requestId = ((Response) msg).getResponseId();
-            data = codec.encode(((Response) msg).getValue(), requestId, false);
+        try {
+            if (msg instanceof Request) {
+                int requestId = ((Request) msg).getRequestId();
+                data = codec.encode(((Request) msg).getMsg(), requestId, true);
+            } else if (msg instanceof Response) {
+                int requestId = ((Response) msg).getResponseId();
+                data = codec.encode(((Response) msg).getValue(), requestId, false);
+            }
+            out.writeBytes(data);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            ctx.close();
         }
-        out.writeBytes(data);
     }
 
 }

@@ -10,5 +10,11 @@
     </parent>
     <artifactId>flying-bird-rpc</artifactId>
     <name>flying-bird-rpc</name>
-    <url>http://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>flying-bird</groupId>
+            <artifactId>flying-bird-remoting</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
