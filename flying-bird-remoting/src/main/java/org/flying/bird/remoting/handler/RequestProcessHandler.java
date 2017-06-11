@@ -15,6 +15,7 @@ public class RequestProcessHandler extends SimpleChannelInboundHandler<BirdMessa
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, BirdMessage msg) throws Exception {
+        System.out.println(msg);
 
         Object body = msg.body();
         if (body instanceof URL) {
@@ -22,7 +23,6 @@ public class RequestProcessHandler extends SimpleChannelInboundHandler<BirdMessa
             final String serviceInterface = url.getClassName();
             final String methodName = url.getMethod();
             final Map<String, MethodArg> arg = url.getParam();
-            System.out.println(msg);
             Response rep = new Response();
             rep.setResponseId(msg.getHeader().serialId());
             rep.setValue("Rpc invoke success.");

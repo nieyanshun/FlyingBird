@@ -15,6 +15,6 @@
     <reference:reference id="birdService"
         class="test.org.flying.bird.spring.Service" retries="0"
         loadblance="roundrobin" timeout="1000" registry="regCenter"
-        cluster="failfast" url="127.0.0.1:2181" />
+        cluster="failfast" url="127.0.0.1:9000" />
 
 </beans>
