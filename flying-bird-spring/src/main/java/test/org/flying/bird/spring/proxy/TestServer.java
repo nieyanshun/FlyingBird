@@ -1,7 +1,9 @@
 package test.org.flying.bird.spring.proxy;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import test.org.flying.bird.spring.Service;
+import org.flying.bird.remoting.server.NettyServer;
+import org.flying.bird.spring.extension.DefaultRequestHandler;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import io.netty.channel.ChannelHandler;
 
 public class TestServer {
 
@@ -9,26 +11,16 @@ public class TestServer {
 
 
         ClassPathXmlApplicationContext context =
-                new ClassPathXmlApplicationContext("spring-test.xml");
+                new ClassPathXmlApplicationContext("spring-server-test.xml");
 
         context.start();
-        try {
-            Object byType = context.getBean(org.flying.bird.spring.SpringContext.class);
-            org.flying.bird.spring.api.Service serviceBeanHolder =
-                    (org.flying.bird.spring.api.Service) context.getBean("birdService");
-            System.out.println(serviceBeanHolder);
-
-            String serviceName = serviceBeanHolder.getRef();
-
-            Service service = (Service) context.getBean(serviceName);
-
-            service.test();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        
+        ChannelHandler[] handlers = new ChannelHandler[1];
+        handlers[0] = new DefaultRequestHandler();
+        NettyServer server = new NettyServer("127.0.0.1", 9000, handlers);
+        server.bind();
         context.close();
-    
+
     }
 
 }

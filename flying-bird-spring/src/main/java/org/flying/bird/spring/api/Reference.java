@@ -10,16 +10,21 @@ import org.flying.bird.common.URL;
 import org.flying.bird.remoting.Request;
 import org.flying.bird.remoting.client.BirdClient;
 import org.flying.bird.remoting.client.BirdClientFactory;
+import org.flying.bird.spring.ContextFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  * @author nieyanshun
  *
  */
 @SuppressWarnings("rawtypes")
-public class Reference implements FactoryBean, InitializingBean, DisposableBean {
+public class Reference
+        implements FactoryBean, InitializingBean, DisposableBean, ApplicationContextAware {
 
     private String clazz;
 
@@ -34,6 +39,8 @@ public class Reference implements FactoryBean, InitializingBean, DisposableBean 
     private String cluster;
 
     private String url;
+
+    private String version;
 
     private Class<?> remoteInterface;
 
@@ -161,6 +168,16 @@ public class Reference implements FactoryBean, InitializingBean, DisposableBean 
         return url;
     }
 
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+
+
     private BirdClient client;
 
     @Override
@@ -242,5 +259,10 @@ public class Reference implements FactoryBean, InitializingBean, DisposableBean 
             throw new RuntimeException("Reference bean not inited.");
         }
         client.disConnect();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        ContextFactory.regiest(applicationContext);
     }
 }

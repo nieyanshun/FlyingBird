@@ -11,9 +11,11 @@
                 <xsd:extension base="beans:identifiedType">
                     <xsd:attribute name="interface" type="xsd:string"
                         use="required" />
-                    <xsd:attribute name="service-ref" type="xsd:string"
-                        use="required" />
+                    <xsd:attribute name="service-ref"
+                        type="xsd:string" use="required" />
                     <xsd:attribute name="registry" type="xsd:string"
+                        use="required" />
+                    <xsd:attribute name="version" type="xsd:string"
                         use="required" />
                 </xsd:extension>
             </xsd:complexContent>

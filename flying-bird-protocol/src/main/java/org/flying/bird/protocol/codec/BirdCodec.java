@@ -132,12 +132,13 @@ public class BirdCodec implements Codec {
         if (data.length != length) {
             throw new BirdDecodingException("Binary data broken.");
         }
-        byte[] body = new byte[header.bodyLength()];
-        System.arraycopy(data, Header.HEADER_LENGTH, body, 0, header.bodyLength());
-
-        return new BirdMessage(header, decodeBody(body));
-
-
+        if (0 != header.bodyLength()) {
+            byte[] body = new byte[header.bodyLength()];
+            System.arraycopy(data, Header.HEADER_LENGTH, body, 0, header.bodyLength());
+            return new BirdMessage(header, decodeBody(body));
+        } else {
+            return new BirdMessage(header, null);
+        }
     }
 
     /**
@@ -153,13 +154,17 @@ public class BirdCodec implements Codec {
 
     @Override
     public byte[] encode(Object msg, int requestId, boolean isReq) {
-        byte[] body = serialization.serialize(msg);
-
-        byte[] headerArr = encodeHeader(createHeader(isReq, body.length, requestId));
-        byte[] binaryMsg = new byte[Header.HEADER_LENGTH + body.length];
-        System.arraycopy(headerArr, 0, binaryMsg, 0, headerArr.length);
-        System.arraycopy(body, 0, binaryMsg, Header.HEADER_LENGTH, body.length);
-
+        byte[] body = null;
+        byte[] binaryMsg = null;
+        if (null != msg) {
+            body = serialization.serialize(msg);
+            byte[] headerArr = encodeHeader(createHeader(isReq, body.length, requestId));
+            binaryMsg = new byte[Header.HEADER_LENGTH + body.length];
+            System.arraycopy(headerArr, 0, binaryMsg, 0, headerArr.length);
+            System.arraycopy(body, 0, binaryMsg, Header.HEADER_LENGTH, body.length);
+        } else {
+            binaryMsg = encodeHeader(createHeader(isReq, 0, requestId));
+        }
         return binaryMsg;
     }
 

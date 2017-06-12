@@ -1,17 +1,19 @@
 package org.flying.bird.spring;
 
+import org.springframework.context.ApplicationContext;
 
 public class ContextFactory {
 
-    private static Context CONTEXT = null;
+    private static Context CONTEXT = new SpringContext();
 
-    synchronized static void regiest(Context c) {
-        if (null == CONTEXT) {
-            CONTEXT = c;
-        }
+    private static volatile boolean IS_INIT = false;
+
+    public synchronized static void regiest(ApplicationContext c) {
+        if (!IS_INIT)
+            CONTEXT.setContext(c);
     }
 
-    static Context getContext() {
+    public static Context getContext() {
         if (null == CONTEXT) {
             throw new RuntimeException("Factory method regiest must called before getContext.");
         }

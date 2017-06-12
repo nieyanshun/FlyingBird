@@ -10,8 +10,8 @@ public class ServiceImpl implements Service {
 
     @Override
     public String print(Arg arg) {
-        System.out.println("ServiceImpl test invoking.");
-        return "Result";
+        System.out.println("ServiceImpl test invoking. arg:" + arg);
+        return "Service rpc invkoe successed!";
     }
 
 }

@@ -13,9 +13,7 @@ public class ResponseProcessorHandler extends SimpleChannelInboundHandler<BirdMe
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, BirdMessage msg) throws Exception {
-        Object body = msg.body();
-        Response rep = new Response();
-        rep.setValue(body);
+        Response rep = (Response) msg.body();
         rep.setResponseId(msg.getHeader().serialId());
         ResponseFuture.responseRecived(rep);
     }

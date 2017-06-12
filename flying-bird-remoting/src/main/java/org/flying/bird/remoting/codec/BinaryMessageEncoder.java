@@ -27,7 +27,8 @@ public class BinaryMessageEncoder extends MessageToByteEncoder<Encodealbe> {
                 data = codec.encode(((Request) msg).getMsg(), requestId, true);
             } else if (msg instanceof Response) {
                 int requestId = ((Response) msg).getResponseId();
-                data = codec.encode(((Response) msg).getValue(), requestId, false);
+                // 编码整个Response对象
+                data = codec.encode(msg, requestId, false);
             }
             out.writeBytes(data);
         } catch (Throwable t) {

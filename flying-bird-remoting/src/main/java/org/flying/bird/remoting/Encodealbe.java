@@ -1,5 +1,7 @@
 package org.flying.bird.remoting;
 
-public interface Encodealbe {
+import java.io.Serializable;
+
+public interface Encodealbe extends Serializable{
 
 }

@@ -13,8 +13,9 @@
                         http://www.letv.com/schema/flying-bird/service/service.xsd
                         ">
 
+    <bean id="serviceImpl" class="test.org.flying.bird.spring.ServiceImpl" />
+
     <service:service id="birdService"
         interface="test.org.flying.bird.spring.Service" service-ref="serviceImpl"
-        registry="regCenter" />
-
+        registry="regCenter" version="1.0" />
 </beans>

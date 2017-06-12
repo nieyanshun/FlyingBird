@@ -11,12 +11,14 @@ public class Constant {
     public static final String REFERENCE_ATTR_LOADBLANCE = "loadblance";
 
     public static final String REFERENCE_ATTR_TIMEOUT = "timeout";
-    
+
     public static final String REFERENCE_ATTR_REGISTRY = "registry";
 
     public static final String REFERENCE_ATTR_CLUSTER = "cluster";
 
     public static final String REFERENCE_ATTR_URL = "url";
+
+    public static final String REFERENCE_ATTR_VERSION = "version";
 
     /* REG ATTR */
     public static final String REG_ATTR_URL = "url";
@@ -27,4 +29,6 @@ public class Constant {
     public static final String SERVICE_ATTR_REF = "service-ref";
 
     public static final String SERVICE_ATTR_REGISTRY = "registry";
+
+    public static final String SERVICE_ATTR_VERSION = "version";
 }

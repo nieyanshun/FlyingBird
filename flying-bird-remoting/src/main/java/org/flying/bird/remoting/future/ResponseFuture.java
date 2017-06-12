@@ -82,7 +82,6 @@ public class ResponseFuture implements Future {
 
     void doRecived(Response response) {
         synchronized (lock) {
-            System.out.println("Notify all");
             this.response = response;
             lock.notifyAll();
         }

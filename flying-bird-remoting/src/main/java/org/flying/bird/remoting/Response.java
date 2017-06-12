@@ -2,37 +2,58 @@ package org.flying.bird.remoting;
 
 public class Response implements Encodealbe {
 
-    private int responseId;
+    private transient int responseId;
 
     private Object value;
 
-    private Throwable e;
+    private Throwable exception;
+
+    private int ret;
+
+    private String msg;
+
+    public int getResponseId() {
+        return responseId;
+    }
+
+    public Response setResponseId(int responseId) {
+        this.responseId = responseId;
+        return this;
+    }
 
     public Object getValue() {
         return value;
     }
 
-    public boolean hasException() {
-        return (null == e);
+    public Response setValue(Object value) {
+        this.value = value;
+        return this;
     }
 
     public Throwable getException() {
-        return e;
+        return exception;
     }
 
-    public int getResponseId() {
-        return this.responseId;
+    public Response setException(Throwable exception) {
+        this.exception = exception;
+        return this;
     }
 
-    public void setResponseId(int responseId) {
-        this.responseId = responseId;
+    public int getRet() {
+        return ret;
     }
 
-    public void setValue(Object value) {
-        this.value = value;
+    public Response setRet(int ret) {
+        this.ret = ret;
+        return this;
     }
 
-    public void setE(Throwable e) {
-        this.e = e;
+    public String getMsg() {
+        return msg;
+    }
+
+    public Response setMsg(String msg) {
+        this.msg = msg;
+        return this;
     }
 }

@@ -4,9 +4,10 @@ import org.flying.bird.remoting.Server;
 import org.flying.bird.remoting.codec.BinaryMessageDecoder;
 import org.flying.bird.remoting.codec.BinaryMessageEncoder;
 import org.flying.bird.remoting.handler.InboundExceptionHandler;
-import org.flying.bird.remoting.handler.RequestProcessHandler;
+import org.flying.bird.remoting.handler.RequestEchoProcessHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
@@ -17,20 +18,32 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class NettyServer implements Server {
 
-    private static String ADDRESS = "127.0.0.1";
+    private static String LOCAL_HOST = "127.0.0.1";
+
+    private ChannelHandler[] pluginHandlers;
 
     private String host;
     private int port;
 
     public NettyServer() {
-        host = ADDRESS;
+        host = LOCAL_HOST;
         port = 9000;
+        pluginHandlers = new ChannelHandler[1];
+        pluginHandlers[0] = new RequestEchoProcessHandler();
     }
-
 
     public NettyServer(String host, int port) {
         this.host = host;
         this.port = port;
+        pluginHandlers = new ChannelHandler[1];
+        pluginHandlers[0] = new RequestEchoProcessHandler();
+    }
+
+
+    public NettyServer(String host, int port, ChannelHandler[] pluginHandlers) {
+        this.host = host;
+        this.port = port;
+        this.pluginHandlers = pluginHandlers;
     }
 
 
@@ -57,8 +70,10 @@ public class NettyServer implements Server {
                             ChannelPipeline pipeLine = ch.pipeline();
                             pipeLine.addLast(new BinaryMessageDecoder())
                                     .addLast(new BinaryMessageEncoder())
-                                    .addLast(new InboundExceptionHandler())
-                                    .addLast(new RequestProcessHandler());
+                                    .addLast(new InboundExceptionHandler());
+                            // Handler extension
+                            for (ChannelHandler handler : pluginHandlers)
+                                pipeLine.addLast(handler);
                         }
                     });
             ChannelFuture f = bootStrap.bind(getHost(), getPort()).sync();
@@ -69,16 +84,11 @@ public class NettyServer implements Server {
         }
     }
 
-
     public String getHost() {
         return host;
     }
 
-
     public int getPort() {
         return port;
     }
-
-
-
 }

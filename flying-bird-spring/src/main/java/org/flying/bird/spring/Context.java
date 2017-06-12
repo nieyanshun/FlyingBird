@@ -1,18 +1,17 @@
 package org.flying.bird.spring;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
-public abstract class Context implements ApplicationContextAware {
+public abstract class Context {
 
     ApplicationContext applicationContext;
 
-    abstract org.flying.bird.spring.api.Service getService();
+    public abstract Object getBean(String beanName);
 
-    abstract org.flying.bird.spring.api.Reg getReg();
+    public abstract Object getService(String serviceRef);
 
-    abstract org.flying.bird.spring.api.Reference getReference();
-
-    abstract Object getBean(String beanName);
+    void setContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
 }

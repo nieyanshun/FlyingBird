@@ -1,11 +1,9 @@
 package org.flying.bird.spring;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import org.flying.bird.spring.api.Reference;
-import org.flying.bird.spring.api.Reg;
 import org.flying.bird.spring.api.Service;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 
@@ -15,61 +13,36 @@ import org.springframework.util.StringUtils;
  */
 final public class SpringContext extends Context {
 
-    private static Map<String, Object> OBJS = new ConcurrentHashMap<>();
+    private Map<String, Object> objs = new ConcurrentHashMap<>();
 
-    private static final String SERVICE_CLASS = Service.class.getName();
+    SpringContext() {}
 
-    private static final String REFERENCE_CLASS = Reference.class.getName();
-
-    private static final String REG_CLASS = Reg.class.getName();
-
-    @Override
-    public void setApplicationContext(ApplicationContext context) throws BeansException {
-        applicationContext = context;
-        ContextFactory.regiest(this);
+    SpringContext(ApplicationContext context) {
+        this.applicationContext = context;
     }
 
     @Override
-    public Service getService() {
-        Service service = null;
-
-        if (!OBJS.containsKey(SERVICE_CLASS)) {
-            service = applicationContext.getBean(Service.class);
-            OBJS.putIfAbsent(SERVICE_CLASS, service);
-        } else {
-            service = (Service) OBJS.get(SERVICE_CLASS);
-        }
-        return service;
-    }
-
-    @Override
-    public Reg getReg() {
-        Reg reg = null;
-        if (!OBJS.containsKey(REG_CLASS)) {
-            reg = applicationContext.getBean(Reg.class);
-            OBJS.put(REG_CLASS, reg);
-        } else {
-            reg = (Reg) OBJS.get(REG_CLASS);
-        }
-        return reg;
-    }
-
-    @Override
-    public Reference getReference() {
-        Reference reference = null;
-        if (!OBJS.containsKey(REFERENCE_CLASS)) {
-            reference = applicationContext.getBean(Reference.class);
-            OBJS.putIfAbsent(REFERENCE_CLASS, reference);
-        } else {
-            reference = (Reference) OBJS.get(REFERENCE_CLASS);
-        }
-        return reference;
-    }
-
-    @Override
-    Object getBean(String beanName) {
+    public Object getBean(String beanName) {
         if (!StringUtils.hasLength(beanName))
             return null;
         return (applicationContext.getBean(beanName));
+    }
+
+    @Override
+    public Object getService(String className) {
+        Objects.requireNonNull(className);
+        String serviceRef = Service.INTERFACE_2_SERVICE_REF.get(className);
+        Objects.requireNonNull(serviceRef);
+        Object service = objs.get(serviceRef);
+        if (null != service)
+            return service;
+
+        service = getBean(serviceRef);
+
+        if (null == service) {
+            throw new IllegalArgumentException("Service bean not found for beanId " + serviceRef);
+        }
+
+        return service;
     }
 }

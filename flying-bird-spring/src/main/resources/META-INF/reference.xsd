@@ -22,6 +22,8 @@
                     <xsd:attribute name="cluster" type="xsd:string"
                         default="failfast" />
                     <xsd:attribute name="url" type="xsd:string" />
+                    <xsd:attribute name="version" type="xsd:string"
+                        use="required" />
                 </xsd:extension>
             </xsd:complexContent>
         </xsd:complexType>
