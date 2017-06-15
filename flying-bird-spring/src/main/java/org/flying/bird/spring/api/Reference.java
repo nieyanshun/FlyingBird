@@ -1,15 +1,9 @@
 package org.flying.bird.spring.api;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.util.HashMap;
-import java.util.Map;
-import org.flying.bird.common.MethodArg;
-import org.flying.bird.common.URL;
-import org.flying.bird.remoting.Request;
 import org.flying.bird.remoting.client.BirdClient;
 import org.flying.bird.remoting.client.BirdClientFactory;
+import org.flying.bird.rpc.factory.JavassisProxyFactory;
+import org.flying.bird.rpc.handler.JavassistinvocationHandler;
 import org.flying.bird.spring.ContextFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
@@ -176,55 +170,13 @@ public class Reference
         this.version = version;
     }
 
-
-
     private BirdClient client;
 
     @Override
     public Object getObject() throws Exception {
-
-        final Class<?>[] interfaces = new Class[1];
-
-        interfaces[0] = remoteInterface;
-
-        return Proxy.newProxyInstance(Reference.class.getClassLoader(), interfaces,
-                new InvocationHandler() {
-                    @Override
-                    public Object invoke(Object proxy, Method method, Object[] args)
-                            throws Throwable {
-                        if (method.getName().equals("toString"))
-                            return "Proxy bean toString invoked.";
-
-                        if (method.getName().equals("hashCode")) {
-                            throw new RuntimeException(
-                                    "hashCode invoke not permitted on proxy bean.");
-                        }
-
-                        if (method.getName().equals("equals")) {
-                            throw new RuntimeException(
-                                    "equals invoke not permitted on proxy bean.");
-                        }
-
-                        final Request request = new Request();
-                        final Map<String, MethodArg> methodParams = new HashMap<>();
-
-                        Class<?>[] paramTypes = method.getParameterTypes();
-                        int index = 0;
-                        for (Class<?> param : paramTypes) {
-                            if (!(param.isAssignableFrom(args[index].getClass()))) {
-                                throw new RuntimeException("Method param class type exception.");
-                            }
-                            final MethodArg arg = new MethodArg(param.getName(), args[index]);
-                            methodParams.put(String.valueOf(index + 1), arg);
-                            index++;
-                        }
-
-                        final URL reqUrl = new URL.Builder().className(getClazz())
-                                .method(method.getName()).param(methodParams).build();
-                        request.setMsg(reqUrl);
-                        return client.request(request).get().getValue();
-                    }
-                });
+        return new JavassisProxyFactory().getProxy().newProxyInstance(
+                Thread.currentThread().getContextClassLoader(), remoteInterface,
+                new JavassistinvocationHandler(client, getClazz()));
     }
 
     @Override

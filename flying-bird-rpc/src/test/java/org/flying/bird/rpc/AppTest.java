@@ -1,7 +1,8 @@
 package org.flying.bird.rpc;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
@@ -12,9 +13,6 @@ import javassist.NotFoundException;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.MethodHandler;
-import javassist.util.proxy.ProxyFactory;
 
 
 /**
@@ -70,43 +68,6 @@ public class AppTest extends TestCase {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    public void testJavassistAop() {
-        ProxyFactory factory = new ProxyFactory();
-        // 设置父类，ProxyFactory将会动态生成一个类，继承该父类
-        factory.setSuperclass(ServiceProxy.class);
-        factory.setFilter(new MethodFilter() {
-            @Override
-            public boolean isHandled(Method m) {
-                if (m.getName().equals("testProxy")) {
-                    return true;
-                }
-                return false;
-            }
-        });
-        // 设置拦截处理
-        factory.setHandler(new MethodHandler() {
-            @Override
-            public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args)
-                    throws Throwable {
-                long start = System.currentTimeMillis();
-                Object result = proceed.invoke(self, args);
-                System.out.println("耗时:" + (System.currentTimeMillis() - start) + "ms");
-                return result;
-            }
-        });
-        Class<?> c = factory.createClass();
-        Service object = null;
-        try {
-            object = (Service) c.newInstance();
-            object.testProxy();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     public static final String FIELD_NAME = "invoker";
 
@@ -127,7 +88,7 @@ public class AppTest extends TestCase {
         }
         clazz.setInterfaces(interfaces);
         try {
-            final String invokerClassName = Invoker.class.getName();
+            final String invokerClassName = Service.class.getName();
             StringBuilder fieldSource = new StringBuilder("private").append(FIELD_SEPARATOR)
                     .append(invokerClassName).append(FIELD_SEPARATOR).append(FIELD_NAME)
                     .append(FIELD_SEPARATOR).append("=").append(FIELD_SEPARATOR).append("new")
@@ -157,6 +118,17 @@ public class AppTest extends TestCase {
             clazz.writeFile("C:\\Users\\nieyanshun\\Desktop\\test");
         } catch (CannotCompileException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void testByteRead() {
+        byte[] arr = {0x00, 0x01};
+
+        DataInputStream in = new DataInputStream(new ByteArrayInputStream(arr));
+        try {
+            System.out.println(in.readShort());
         } catch (IOException e) {
             e.printStackTrace();
         }
