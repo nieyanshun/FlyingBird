@@ -3,7 +3,9 @@ package org.flying.bird.spring.api;
 import org.flying.bird.remoting.client.BirdClient;
 import org.flying.bird.remoting.client.BirdClientFactory;
 import org.flying.bird.rpc.factory.JavassisProxyFactory;
-import org.flying.bird.rpc.handler.JavassistinvocationHandler;
+import org.flying.bird.rpc.factory.JdkProxyFactory;
+import org.flying.bird.rpc.handler.JavassistInvocationHandler;
+import org.flying.bird.rpc.handler.JdkInvocationHandler;
 import org.flying.bird.spring.ContextFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
@@ -35,6 +37,8 @@ public class Reference
     private String url;
 
     private String version;
+
+    private String proxy;
 
     private Class<?> remoteInterface;
 
@@ -170,13 +174,28 @@ public class Reference
         this.version = version;
     }
 
+    public String getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(String proxy) {
+        this.proxy = proxy;
+    }
+
     private BirdClient client;
 
     @Override
     public Object getObject() throws Exception {
-        return new JavassisProxyFactory().getProxy().newProxyInstance(
-                Thread.currentThread().getContextClassLoader(), remoteInterface,
-                new JavassistinvocationHandler(client, getClazz()));
+        if (proxy.equals("jdk")) {
+            return new JdkProxyFactory().getProxy().newProxyInstance(
+                    Thread.currentThread().getContextClassLoader(), remoteInterface,
+                    new JdkInvocationHandler(client, getClazz()));
+        } else if (proxy.equals("javassist")) {
+            return new JavassisProxyFactory().getProxy().newProxyInstance(
+                    Thread.currentThread().getContextClassLoader(), remoteInterface,
+                    new JavassistInvocationHandler(client, getClazz()));
+        }
+        throw new RuntimeException("Unkow proxy type :" + proxy);
     }
 
     @Override

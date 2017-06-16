@@ -16,7 +16,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.w3c.dom.Element;
 
-public class ReferenceBeanDefinitionParser extends AbstractBeanDefinitionParser implements ApplicationContextAware{
+public class ReferenceBeanDefinitionParser extends AbstractBeanDefinitionParser
+        implements ApplicationContextAware {
 
     private static Set<String> REFERENCE_CACAHE = new HashSet<>();
 
@@ -34,6 +35,7 @@ public class ReferenceBeanDefinitionParser extends AbstractBeanDefinitionParser 
         result.addPropertyValue("url", element.getAttribute(Constant.REFERENCE_ATTR_URL));
         final String version = element.getAttribute(Constant.REFERENCE_ATTR_VERSION);
         result.addPropertyValue("version", version);
+        result.addPropertyValue("proxy", element.getAttribute(Constant.REFERENCE_ATTR_PROXY));
         final String key = clazz.concat(":").concat(version);
         if (!REFERENCE_CACAHE.contains(key))
             synchronized (REFERENCE_CACAHE) {

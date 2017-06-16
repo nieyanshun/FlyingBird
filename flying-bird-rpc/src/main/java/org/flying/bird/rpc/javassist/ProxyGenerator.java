@@ -13,6 +13,7 @@ import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewConstructor;
+import javassist.LoaderClassPath;
 
 public class ProxyGenerator {
 
@@ -29,6 +30,8 @@ public class ProxyGenerator {
         }
 
         ClassPool pool = ClassPool.getDefault();
+
+        pool.appendClassPath(new LoaderClassPath(classLoader));
 
         String qualifiedName = generateClassName(targetClass);
 

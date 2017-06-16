@@ -20,6 +20,8 @@ public class Constant {
 
     public static final String REFERENCE_ATTR_VERSION = "version";
 
+    public static final String REFERENCE_ATTR_PROXY = "proxy";
+
     /* REG ATTR */
     public static final String REG_ATTR_URL = "url";
 
